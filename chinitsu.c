@@ -146,6 +146,7 @@ char chk_tenpai( char *tehai )
 	int ukihai_high; /* 浮き牌（大きいほう）*/
 	int ukihai_low;  /* 浮き牌（小さいほう）*/
 	int i;
+	int toitsu_cnt; /* チートイ判断の際に使用 */
 
 	jantou_index = 0;
 	
@@ -341,6 +342,54 @@ char chk_tenpai( char *tehai )
 	}
 	/* 最後の牌までチェックできたとき、聴牌 */
 	if ( tehai_index == 9 )
+	{
+		return 1;
+	}
+	
+	/* チートイの判定 */
+	tehai_index = 0;
+	ukihai_high = 0;
+	ukihai_low = 0;
+	toitsu_cnt = 0;
+	
+	for( i = 0; i < 11; i++)
+	{
+		tehai_temp[i] = tehai[i];
+	}
+	
+	while( toitsu_cnt < 6 )
+	{
+		if( tehai_temp[tehai_index] == 2 )
+		{
+			toitsu_cnt++;
+			tehai_index++;
+			continue;
+		}
+		else if( tehai_temp[tehai_index] == 0 )
+		{
+			tehai_index++;
+			continue;
+		}
+		else if( tehai_temp[tehai_index] == 1 )
+		{
+			if( ukihai_low == 0 )
+			{
+				ukihai_low = tehai_index + 1;
+				tehai_index++;
+				continue;
+			}
+			else
+			{
+				break;
+			}
+		}
+		else
+		{
+			break;
+		}
+	}
+	
+	if( toitsu_cnt == 6 )
 	{
 		return 1;
 	}
